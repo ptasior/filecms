@@ -2,13 +2,15 @@
 
 <?php function print_menu($root) {?>
 <ul>
-	<span><?php echo $root['name'];?></span>
+	<li>
+		<a href="<?=$root['path']?>"><?=$root['name']?></a>
+	</li>
 	<?php foreach($root['list'] as $l):?>
 		<?php if(is_array($l)):?>
-			<?php print_menu($l);?>
-			<?php continue;?>
+			<?php print_menu($l)?>
+		<?php else:?>
+			<li><a href="<?=$root['path'].'/'.$l?>"><?=$l?></a></li>
 		<?php endif;?>
-		<li><a href="<?=$root['path'].'/'.$l;?>"><?php echo $l;?></a></li>
 	<?php endforeach;?>
 </ul>
 <?php }?>
