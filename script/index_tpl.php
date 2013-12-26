@@ -22,7 +22,7 @@ div{
 </head>
 <body>
 	<div id="top">
-		<?php module('auth')?>
+		<?php module('user')?>
 	</div>
 	<div id="menu">
 		<?php module('menu');?>

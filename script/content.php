@@ -19,10 +19,29 @@ function list_files($path)
 	}
 	return $list;
 }
+
 $path = $request['path'];
-$t = array( 'path'=>substr($path, strlen($DATA_PATH)+2),
-			'files'=>list_files($path));
-// var_dump($t);
-template('dir', $t);
+if(is_dir($path))
+{
+	$t = array( 'path'=>substr($path, strlen($DATA_PATH)+2),
+				'files'=>list_files($path));
+	// var_dump($t);
+	template('dir', $t);
+}
+else if(is_file($path))
+{
+	if(!allow_path($entry))
+	{
+		echo 'No priviledges to see this';
+		return;
+	}
+	if(substr($path, -4) == '.txt')
+		echo file_get_contents($path);
+	else if(substr($path, -4) == '.php')
+		include $path;
+	else echo 'Unhandled extension';
+}
+else
+	echo 'Que?'.$path;
 ?>
 
