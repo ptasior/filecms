@@ -2,17 +2,17 @@
 	global $USERS_FILE;
 	$users = array('users'=> array('ja'=>'qq', 'admin'=>'xxx') ,
 				'groups'=>array(
-					array(  'name'=>'public',
+					'public'=>array(
 							'allow'=>array('^\/[^\/]*$'),
 							'deny'=>array('\.php$'),
 							'users'=>array()
 						),
-					array(  'name'=>'users',
+					'users'=>array(
 							'allow'=>array('.*'),
 							'deny'=>array('^\/admin.*', '\.php$'),
 							'users'=>array('ja')
 						),
-					array(  'name'=>'admin',
+					'admin'=>array(
 							'allow'=>array('.*'),
 							'deny'=>array(),
 							'users'=>array('admin')

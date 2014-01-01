@@ -58,9 +58,7 @@ function allow_path($name)
 		return check_privs($_SESSION['user'], $name);
 
 	require_once 'auth.php';
-	foreach(load_users()['groups'] as $g)
-		if($g['name'] == 'public')
-			return check_privs($g, $name);
+	return check_privs(load_users()['groups']['public'], $name);
 
 	return false;
 }

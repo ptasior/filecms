@@ -4,7 +4,7 @@ function load_users()
 	global $USERS_FILE;
 
 	if(!is_file($USERS_FILE))
-		return array('groups'=> array(array(  'name'=>'public',
+		return array('groups'=> array('public'=>array(
 										'allow'=>array('.*'),
 										'deny'=>array(),
 										'users'=>array()

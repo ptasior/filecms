@@ -10,12 +10,18 @@
 		switch($_REQUEST['action'])
 		{
 			case 'del':
+				if(!isset($users['users'][$_REQUEST['login']]))
+					print_error('Such user doesn\'t exists');
 				unset($users['users'][$_REQUEST['login']]);
 				break;
 			case 'add':
+				if(isset($users['users'][$_REQUEST['login']]))
+					print_error('Such user already exists');
 				$users['users'][$_REQUEST['login']] = $_REQUEST['password'];
 				break;
 			case 'change':
+				if(!isset($users['users'][$_REQUEST['login']]))
+					print_error('Such user doesn\'t exists');
 				$users['users'][$_REQUEST['login']] = $_REQUEST['password'];
 				break;
 		}
@@ -38,21 +44,22 @@
 
 <?php foreach($users['users'] as $login=>$pwd):?>
 <h3><?=$login?></h3>
-<form action="/actionPlugin?file=<?=$user_path?>&cat=user" method="post">
+<form action="/actionPlugin?file=<?=$user_path?>" method="post">
 	<input type="hidden" name="login" value="<?=$login?>"></input>
 	<input type="hidden" name="action" value="change"></input>
 	password: <input type="text" name="password"></input>
 	<input type="submit" value="Change"></input>
 </form>
-<form action="/actionPlugin?file=<?=$user_path?>&cat=user" method="post">
+<form action="/actionPlugin?file=<?=$user_path?>" method="post">
 	<input type="hidden" name="login" value="<?=$login?>"></input>
 	<input type="hidden" name="action" value="del"></input>
 	<input type="submit" value="Delete user"></input>
 </form>
+<hr>
 <?php endforeach?>
 
 <h3>Add new user:</h3>
-<form action="/actionPlugin?file=<?=$user_path?>&cat=user" method="post">
+<form action="/actionPlugin?file=<?=$user_path?>" method="post">
 	<input type="hidden" name="action" value="add"></input>
 	login: <input type="text" name="login"> </input>
 	password: <input type="text" name="password"> </input>
