@@ -1,45 +1,43 @@
 <?php
 function load_users()
 {
-// $tab = ['qq'=>'rq', 'aa'=>'bb'];
-// $tab[] = $tab;
-// $ret = json_encode($tab, JSON_PRETTY_PRINT);
-// var_dump($ret);
-// echo "<br><br>";
-// 
-// $z = json_decode($ret);
-// var_dump($z);
+	global $USERS_FILE;
 
-	// create a mutex at read/write
-	// todo handle extensions (.php!)
+	if(!is_file($USERS_FILE))
+		return array('groups'=> array(array(  'name'=>'public',
+										'allow'=>array('.*'),
+										'deny'=>array(),
+										'users'=>array()
+									)));
+
+	$fp = fopen($USERS_FILE, "rb");
+	if($fp === false)
+		print_error('Cannot open users database');
+
+	if(!flock($fp, LOCK_SH)) // 1 - blocking
+		print_error('Cannot lock users database');
+
+	$contents = fread($fp, filesize($USERS_FILE));
+	flock($fp, LOCK_UN);
+	fclose($fp);
+
+	$users = json_decode($contents, true);
+	if($users === NULL)
+		print_error('Cannot decode users database');
+
+	return $users;
+
 	// Make a copy of the file
-	return array('users'=> array('ja'=>'qq', 'admin'=>'xxx') ,
-				'groups'=>array(
-					array(  'name'=>'public',
-							'allow'=>array('^\/[^\/]*$'),
-							'deny'=>array('\.php$'),
-							'users'=>array()
-						),
-					array(  'name'=>'users',
-							'allow'=>array('.*'),
-							'deny'=>array('^\/admin.*', '\.php$'),
-							'users'=>array('ja')
-						),
-					array(  'name'=>'admin',
-							'allow'=>array('.*'),
-							'deny'=>array(),
-							'users'=>array('admin')
-						)
-					));
 }
 
 function auth_action()
 {
+	// todo handle extensions (.php!)
 	if(isset($_REQUEST['act']) && $_REQUEST['act'] == 'logout')
 	{
 		unset($_SESSION);
 		session_destroy();
-		display('/');
+		forward('/');
 		return;
 	}
 
@@ -71,7 +69,7 @@ function auth_action()
 	$_SESSION['user']['allow'] = $allow;
 	$_SESSION['user']['deny'] = $deny;
 
-	display('/');
+	forward('/');
 }
 ?>
 

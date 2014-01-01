@@ -19,6 +19,12 @@ function print_error($msg)
 	exit(0);
 }
 
+function forward($url)
+{
+	header('location:'.$url);
+	exit(0);
+}
+
 function display($url)
 {
 	global $request;
@@ -93,12 +99,16 @@ function url_parse()
 
 function handle_action($action)
 {
+	global $DATA_PATH;
 	switch($action)
 	{
 		case 'Login': require_once 'auth.php'; auth_action(); break;
-		case 'Upload': break;
-		case 'Delete': break;
-		case 'Move': break;
+		case 'Plugin':	if(!allow_path($_REQUEST['file']))
+							print_error('Acces deined');
+						if(!is_file($DATA_PATH.'/'.$_REQUEST['file']))
+							print_error('No such plugin');
+						require $DATA_PATH.'/'.$_REQUEST['file'];
+						break;
 		default: print_error('No such action: '.action); break;
 	}
 }
