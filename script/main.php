@@ -103,8 +103,10 @@ function handle_action($action)
 	switch($action)
 	{
 		case 'Login': require_once 'auth.php'; auth_action(); break;
-		case 'Plugin':	if(!allow_path($_REQUEST['file']))
-							print_error('Acces deined');
+		case 'Plugin':	if(!isset($_REQUEST['file']))
+							print_error('No plugin specified');
+						if(!allow_path($_REQUEST['file']))
+							print_error('Acces denied');
 						if(!is_file($DATA_PATH.'/'.$_REQUEST['file']))
 							print_error('No such plugin');
 						require $DATA_PATH.'/'.$_REQUEST['file'];

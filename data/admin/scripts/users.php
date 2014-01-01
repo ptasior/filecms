@@ -1,17 +1,30 @@
 <?php
 	global $USERS_FILE;
 
+	require_once 'script/auth.php';
 	$users = load_users();
 
 	if(isset($_REQUEST['file'])) // Writing
 	{
 		// Modify it
+		switch($_REQUEST['action'])
+		{
+			case 'del':
+				unset($users['users'][$_REQUEST['login']]);
+				break;
+			case 'add':
+				$users['users'][$_REQUEST['login']] = $_REQUEST['password'];
+				break;
+			case 'change':
+				$users['users'][$_REQUEST['login']] = $_REQUEST['password'];
+				break;
+		}
 
 		$fp = fopen($USERS_FILE, "w");
 		if($fp === false)
 			print_error('Cannot open users database');
 
-		if(!flock($fp, LOCK_EX, 1)) // 1 - blocking
+		if(!flock($fp, LOCK_EX))
 			print_error('Cannot lock users database');
 
 		fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
@@ -19,23 +32,30 @@
 		flock($fp, LOCK_UN);
 		fclose($fp);
 
-		forward($user_path);
+		forward($_REQUEST['file']);
 	}
-
-// $tab = ['qq'=>'rq', 'aa'=>'bb'];
-// $tab[] = $tab;
-// $ret = json_encode($tab, JSON_PRETTY_PRINT);
-// var_dump($ret);
-// echo "<br><br>";
-// 
-// $z = json_decode($ret);
-// var_dump($z);
-
-	if(isset($_REQUEST['file']))
-		forward('/');
 ?>
-<form action="/actionPlugin?file=<?=$user_path?>" method="post">
-	<input type="text" name="login"> </input>
-	<input type="text" name="password"> </input>
-	<input type="submit" value="Login"></input>
+
+<?php foreach($users['users'] as $login=>$pwd):?>
+<h3><?=$login?></h3>
+<form action="/actionPlugin?file=<?=$user_path?>&cat=user" method="post">
+	<input type="hidden" name="login" value="<?=$login?>"></input>
+	<input type="hidden" name="action" value="change"></input>
+	password: <input type="text" name="password"></input>
+	<input type="submit" value="Change"></input>
 </form>
+<form action="/actionPlugin?file=<?=$user_path?>&cat=user" method="post">
+	<input type="hidden" name="login" value="<?=$login?>"></input>
+	<input type="hidden" name="action" value="del"></input>
+	<input type="submit" value="Delete user"></input>
+</form>
+<?php endforeach?>
+
+<h3>Add new user:</h3>
+<form action="/actionPlugin?file=<?=$user_path?>&cat=user" method="post">
+	<input type="hidden" name="action" value="add"></input>
+	login: <input type="text" name="login"> </input>
+	password: <input type="text" name="password"> </input>
+	<input type="submit" value="Add"></input>
+</form>
+
