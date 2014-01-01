@@ -9,13 +9,15 @@ function list_dir($path)
 	{
 		while (false !== ($entry = readdir($handle)))
 		{
-			if(!allow_path($entry)) continue;
 			if($entry[0] == ".") continue;
 			$tmp = $path.'/'.$entry;
 			if(!is_dir($tmp)) continue;
 
+			$user_path = substr($path, strlen($DATA_PATH)).'/'.$entry;
+			if(!allow_path($user_path.'/')) continue;
+
 			$list[] = array('name'=>$entry,
-					'path'=>substr($path, strlen($DATA_PATH)).'/'.$entry,
+					'path'=>$user_path,
 					'list'=>list_dir($tmp));
 		}
 		closedir($handle);

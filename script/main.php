@@ -13,10 +13,50 @@ function module($name)
 	require $name.'.php';
 }
 
+function print_error($msg)
+{
+	echo 'error: '.$msg;
+	exit(0);
+}
+
+function display($url)
+{
+	global $request;
+	global $DATA_PATH;
+
+	if($url[0] == '/') $url = $DATA_PATH.$url;
+	$request['path'] = $url;
+
+	require_once 'index_tpl.php';
+	exit(0);
+}
+
+function check_privs($privs, $name)
+{
+	foreach($privs['deny'] as $p)
+		if(preg_match('/'.$p.'/', $name))
+			return false;
+
+	foreach($privs['allow'] as $p)
+		if(preg_match('/'.$p.'/', $name))
+			return true;
+
+	return false;
+}
+
 function allow_path($name)
 {
-	return strpos($name, 'q') === false;
-	// todo handle extensions (.php!)
+	// echo $name.'<br>';
+
+	if(isset($_SESSION['user']))
+		return check_privs($_SESSION['user'], $name);
+
+	require_once 'auth.php';
+	foreach(load_users()['groups'] as $g)
+		if($g['name'] == 'public')
+			return check_privs($g, $name);
+
+	return false;
 }
 
 function url_parse()
@@ -39,7 +79,7 @@ function url_parse()
 	$path = $DATA_PATH.'/'.$_SERVER['REQUEST_URI'];
 	$handled_ext = array('.txt', '.php');
 
-	if(!allow_path($path))
+	if(!allow_path($_SERVER['REQUEST_URI']))
 		return array('method'=>'error', 'msg'=>'Permission denied');
 
 	if(is_file($path) && !in_array(substr($path, -4), $handled_ext))
@@ -51,29 +91,14 @@ function url_parse()
 	return array('method'=>'error', 'msg'=>'Unknown command');
 }
 
-function print_error($msg)
-{
-	echo 'error: '.$msg;
-	exit(0);
-}
-
-function display($url)
-{
-	global $request;
-	global $DATA_PATH;
-
-	if($url[0] == '/') $url = $DATA_PATH.$url;
-	$request['path'] = $url;
-
-	require_once 'index_tpl.php';
-	exit(0);
-}
-
 function handle_action($action)
 {
 	switch($action)
 	{
-		case 'Login': include 'auth.php'; break;
+		case 'Login': require_once 'auth.php'; auth_action(); break;
+		case 'Upload': break;
+		case 'Delete': break;
+		case 'Move': break;
 		default: print_error('No such action: '.action); break;
 	}
 }
