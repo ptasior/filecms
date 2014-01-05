@@ -7,7 +7,7 @@ function template($name, $params=[])
 	include 'script/'.$name.'_tpl.php';
 }
 
-function module($name)
+function module($name, $params=[])
 {
 	global $request;
 	require $name.'.php';
@@ -37,6 +37,7 @@ function display($url)
 	exit(0);
 }
 
+// To be called internally
 function check_privs($privs, $name)
 {
 	foreach($privs['deny'] as $p)
@@ -48,6 +49,16 @@ function check_privs($privs, $name)
 			return true;
 
 	return false;
+}
+
+// Returns the file name in data directory. Usage filename(__FILE__)
+function filename($file)
+{
+	global $DATA_PATH;
+	$cnt = strlen(__FILE__);
+	$cnt -= strlen('script/main.php');
+	$cnt += strlen($DATA_PATH);
+	return substr($file, $cnt);
 }
 
 function allow_path($name)
@@ -80,7 +91,11 @@ function url_parse()
 	}
 
 	global $DATA_PATH;
-	$path = $DATA_PATH.'/'.$_SERVER['REQUEST_URI'];
+	$qm = strpos($_SERVER['REQUEST_URI'], '?');
+	if(!$qm) $qm = strlen($_SERVER['REQUEST_URI']);
+	$file = substr($_SERVER['REQUEST_URI'], 0, $qm);
+
+	$path = $DATA_PATH.'/'.$file;
 	$handled_ext = array('.txt', '.php');
 
 	if(!allow_path($_SERVER['REQUEST_URI']))
@@ -90,7 +105,8 @@ function url_parse()
 		return array('method'=>'download', 'file'=>$path);
 
 	if(is_dir($path) || in_array(substr($path, -4), $handled_ext))
-		return array('method'=>'display', 'path'=>$path);
+		return array('method'=>'display', 'path'=>$path,
+								'url'=>$_SERVER['REQUEST_URI']);
 
 	return array('method'=>'error', 'msg'=>'Unknown command');
 }
