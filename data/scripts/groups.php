@@ -26,11 +26,13 @@
 					print_error('Such group doesn\'t exists');
 				$users['groups'][$_REQUEST['group']]['allow'] =
 												split("\n", $_REQUEST['allow']);
+				break;
 			case 'deny':
 				if(!isset($users['groups'][$_REQUEST['group']]))
 					print_error('Such group doesn\'t exists');
 				$users['groups'][$_REQUEST['group']]['deny'] =
 												split("\n", $_REQUEST['deny']);
+				break;
 			case 'users':
 				if(!isset($users['groups'][$_REQUEST['group']]))
 					print_error('Such group doesn\'t exists');
@@ -55,7 +57,7 @@
 		if(!flock($fp, LOCK_EX))
 			print_error('Cannot lock users database');
 
-		fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
+		fwrite($fp, json_encode($users));
 
 		flock($fp, LOCK_UN);
 		fclose($fp);

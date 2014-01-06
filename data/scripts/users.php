@@ -33,7 +33,7 @@
 		if(!flock($fp, LOCK_EX))
 			print_error('Cannot lock users database');
 
-		fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
+		fwrite($fp, json_encode($users));
 
 		flock($fp, LOCK_UN);
 		fclose($fp);

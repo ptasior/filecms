@@ -9,7 +9,7 @@
 						),
 					'users'=>array(
 							'allow'=>array('.*'),
-							'deny'=>array('^\/admin.*', '^\/script.*', '\.php$'),
+							'deny'=>array('^\/admin.*', '^\/scripts.*', '\.php$'),
 							'users'=>array('ja')
 						),
 					'admin'=>array(
@@ -26,7 +26,7 @@
 	if(!flock($fp, LOCK_EX))
 		print_error('Cannot lock users database');
 
-	fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
+	fwrite($fp, json_encode($users));
 
 	flock($fp, LOCK_UN);
 	fclose($fp);
