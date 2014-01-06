@@ -53,7 +53,7 @@ else if($act == 'rename')
 		if (file_exists($DATA_PATH.'/'.$new_name))
 			print_error($new_name.' already exists.');
 
-		rename($old_name, $new_name);
+		rename($DATA_PATH.'/'.$old_name, $DATA_PATH.'/'.$new_name);
 
 		forward(dirname($new_name));
 	}

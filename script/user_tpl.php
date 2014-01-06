@@ -4,7 +4,7 @@
 <?php else:?>
 	<form action="/actionLogin" method="post">
 		Login: <input type="text" name="login"> </input>
-		Password: <input type="text" name="password"> </input>
+		Password: <input type="password" name="password"> </input>
 		<input type="submit" value="Login"></input>
 	</form>
 <?php endif?>
