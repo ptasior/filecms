@@ -44,6 +44,11 @@ if(is_dir($path))
 	if(!allow_path($user_path))
 		print_error('No priviledges to see this');
 
+	if($user_path == '/') $index = '/index.txt';
+	else $index = $user_path.'/index.txt';
+	if(is_file($DATA_PATH.'/'.$index) && allow_path($index))
+		show_file($DATA_PATH.'/'.$index);
+
 	$t = array( 'path'=>$user_path,
 				'files'=>list_files($path));
 	template('dir', $t);

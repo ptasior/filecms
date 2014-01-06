@@ -15,6 +15,10 @@
 	}
 	$file = $_REQUEST['edit'];
 
+	if(is_dir($DATA_PATH.'/'.$file))
+		if($file == '/') $file = '/index.txt';
+		else $file .= '/index.txt';
+
 	if(!allow_path($file))
 		print_error('Acces deined');
 
