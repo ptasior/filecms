@@ -3,7 +3,7 @@ if(isset($_REQUEST['rename']))      $act = 'rename';
 else if(isset($_REQUEST['remove'])) $act = 'remove';
 else if(isset($_REQUEST['mkdir']))  $act = 'mkdir'; 
 else if(isset($_REQUEST['rmdir']))  $act = 'rmdir'; 
-else                                print_error('No such action');
+else                                print_error('Script cannot be invoked like this');
 
 $file = $_REQUEST[$act];
 

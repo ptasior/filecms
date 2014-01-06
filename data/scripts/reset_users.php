@@ -9,7 +9,7 @@
 						),
 					'users'=>array(
 							'allow'=>array('.*'),
-							'deny'=>array('^\/admin.*', '\.php$'),
+							'deny'=>array('^\/admin.*', '^\/script.*', '\.php$'),
 							'users'=>array('ja')
 						),
 					'admin'=>array(

@@ -1,4 +1,7 @@
 <?php
+if(!isset($_REQUEST['upload_to']))
+	print_error('Script cannot be invoked like this');
+
 if(count($_FILES))
 {
 	global $DATA_PATH;
