@@ -23,8 +23,19 @@ function list_files($path)
 	return $list;
 }
 
+function show_file($file)
+{
+	require_once('wiky.php');
+	$wiky = new wiky;
+
+	$input = file_get_contents($file);
+	$input = htmlspecialchars($input);
+	template('show', array('txt'=>$wiky->parse($input)));
+}
+
 $path = $request['path'];
 $user_path = substr($path, strlen($DATA_PATH)+1);
+
 if(is_dir($path))
 {
 	if($user_path[strlen($user_path)-1] != '/')
@@ -35,7 +46,6 @@ if(is_dir($path))
 
 	$t = array( 'path'=>$user_path,
 				'files'=>list_files($path));
-	// var_dump($t);
 	template('dir', $t);
 }
 else if(is_file($path))
@@ -44,12 +54,12 @@ else if(is_file($path))
 		print_error('No priviledges to see this');
 
 	if(substr($path, -4) == '.txt')
-		echo file_get_contents($path);
+		show_file($path);
 	else if(substr($path, -4) == '.php')
 		include $path;
-	else echo 'Unhandled extension';
+	else print_error('Cannot open given extension');
 }
 else
-	echo 'Que?'.$path;
+	print_error('Don\'t know what to do with: '.$path);
 ?>
 

@@ -1,5 +1,7 @@
 <?php
 session_start();
+ob_start();
+
 $request;
 
 function template($name, $params=[])
@@ -15,12 +17,14 @@ function module($name, $params=[])
 
 function print_error($msg)
 {
+	ob_end_clean();
 	echo 'error: '.$msg;
 	exit(0);
 }
 
 function forward($url)
 {
+	ob_end_clean();
 	header('location:'.$url);
 	exit(0);
 }
@@ -35,6 +39,23 @@ function display($url)
 
 	require_once 'index_tpl.php';
 	exit(0);
+}
+
+function send_file($file)
+{
+	ob_end_clean();
+	header('Content-Description: File Transfer');
+	header('Content-Type: application/octet-stream');
+	header('Content-Disposition: attachment; filename='.basename($file));
+	header('Content-Transfer-Encoding: binary');
+	header('Expires: 0');
+	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+	header('Pragma: public');
+	header('Content-Length: ' . filesize($file));
+	ob_clean();
+	flush();
+	readfile($file);
+	exit;
 }
 
 // To be called internally
@@ -134,7 +155,7 @@ $request = url_parse();
 switch($request['method'])
 {
 	case 'display': display($request['path']); break;
-	case 'download': echo 'download: '.$request['file']; break;
+	case 'download': send_file($request['file']); break;
 	case 'error': print_error($request['msg']); break;
 	case 'action': handle_action($request['action']); break;
 }

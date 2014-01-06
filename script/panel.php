@@ -20,9 +20,14 @@ if(allow_path('/'.$SCRIPTS_PATH.'/re_move.php'))
 			'remove_href'=>'/'.$SCRIPTS_PATH.'/re_move.php?remove='.$params['file']));
 }
 
+if(allow_path('/'.$SCRIPTS_PATH.'/edit.php'))
+	$urls = array_merge($urls, array(
+		'edit_href'=>'/'.$SCRIPTS_PATH.'/edit.php?edit='.$request['url']));
+
 
 if($params['mod'] == 'upload')    template('upload', $urls);
 else if($params['mod'] == 'ctrl') template('panel', $urls);
+else if($params['mod'] == 'edit') template('edit', $urls);
 else                              print_error('Unknown action in panel.php');
 
 ?>

@@ -1,4 +1,5 @@
 <h1>Content</h1>
+<div><?=$params['path']?></div>
 <?php module('panel', array('mod'=>'upload'))?>
 
 <?php foreach($params['files'] as $l):?>
