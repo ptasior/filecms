@@ -22,6 +22,7 @@ if(allow_path('/'.$SCRIPTS_PATH.'/re_move.php'))
 
 if(allow_path('/'.$SCRIPTS_PATH.'/edit.php'))
 	$urls = array_merge($urls, array(
+		'create_href'=>'/'.$SCRIPTS_PATH.'/edit.php?create_in='.$request['url'],
 		'edit_href'=>'/'.$SCRIPTS_PATH.'/edit.php?edit='.$request['url']));
 
 

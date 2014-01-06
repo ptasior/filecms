@@ -1,13 +1,25 @@
 <?php
+	if(!isset($_REQUEST['edit']))
+	{
+		$create_in = '/';
+		if(isset($_REQUEST['create_in']))
+			$create_in = $_REQUEST['create_in'].'/';
+		?>
+			<h3>Create a file</h3>
+			<form action="<?=$user_path?>" method="get">
+				<input type="text" name="edit" value="<?=$create_in?>"></input>
+				<input type="submit" value="Create"></input>
+			</form>
+		<?php 
+		return;
+	}
 	$file = $_REQUEST['edit'];
-	if(!isset($file))
-		print_error('No file to open');
 
 	if(!allow_path($file))
 		print_error('Acces deined');
 
 	if(substr($file, -4) != '.txt')
-		print_error('Not an editable file');
+		print_error('You can only edit .txt files');
 
 	$actual_file = $DATA_PATH.'/'.$file;
 	if(isset($_REQUEST['text']))
@@ -22,12 +34,15 @@
 		fclose($fp);
 		forward($file);
 	}
+
+	if(!is_file($actual_file)) $content = '';
+	else                       $content = file_get_contents($actual_file);
 ?>
 
 <h3>Edit</h3>
 <form action="/actionPlugin?file=<?=$user_path?>" method="post">
 	<input type="hidden" name="edit" value="<?=$_REQUEST['edit']?>"></input>
-	<textarea cols="50" rows="10" name="text"><?=file_get_contents($actual_file)?></textarea>
+	<textarea cols="50" rows="10" name="text"><?=$content?></textarea>
 	<input type="submit" value="Save"></input>
 </form>
 

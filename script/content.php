@@ -4,7 +4,7 @@ global $DATA_PATH;
 function list_files($path)
 {
 	global $DATA_PATH;
-	$list = [];
+	$list = array();
 	if ($handle = opendir($path))
 	{
 		while (false !== ($entry = readdir($handle)))

@@ -4,12 +4,12 @@ ob_start();
 
 $request;
 
-function template($name, $params=[])
+function template($name, $params=array())
 {
 	include 'script/'.$name.'_tpl.php';
 }
 
-function module($name, $params=[])
+function module($name, $params=array())
 {
 	global $request;
 	require $name.'.php';
@@ -90,7 +90,8 @@ function allow_path($name)
 		return check_privs($_SESSION['user'], $name);
 
 	require_once 'auth.php';
-	return check_privs(load_users()['groups']['public'], $name);
+	$users = load_users();
+	return check_privs($users['groups']['public'], $name);
 
 	return false;
 }
