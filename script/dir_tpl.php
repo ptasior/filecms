@@ -1,5 +1,5 @@
 <h1>Content</h1>
-<div><?=$params['path']?></div>
+<div>Path: <span class="breadcrumb"><?=$params['path']?></span></div>
 <?php module('panel', array('mod'=>'upload'))?>
 
 <?php foreach($params['files'] as $l):?>

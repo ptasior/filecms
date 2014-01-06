@@ -1,10 +1,10 @@
 <?php if(isset($_SESSION['user']['login'])):?>
-	Logged user: <?=($_SESSION['user']['login'])?>
-	<a href="/actionLogin?act=logout">Logout</a>
+	Logged user: <em><?=($_SESSION['user']['login'])?></em>
+	<a href="/actionLogin?act=logout" class="button" title="logout">Logout</a>
 <?php else:?>
 	<form action="/actionLogin" method="post">
-		<input type="text" name="login"> </input>
-		<input type="text" name="password"> </input>
+		Login: <input type="text" name="login"> </input>
+		Password: <input type="text" name="password"> </input>
 		<input type="submit" value="Login"></input>
 	</form>
 <?php endif?>
