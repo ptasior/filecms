@@ -55,6 +55,9 @@ a{
 	width: 805px;
 	float: left;
 }
+#content img{
+	max-width: 800px;
+}
 .button{
 	padding: 0 2px;
 	background-color: #AAAAAA;

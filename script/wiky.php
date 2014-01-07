@@ -16,9 +16,9 @@ class wiky {
 	public function __construct($analyze=false) {
 		$this->patterns=array(
 			// Headings
-			"/^==== (.+?) ====/m",						// Subsubheading
-			"/^=== (.+?) ===/m",						// Subheading
-			"/^== (.+?) ==/m",						// Heading
+			"/^====(.+?)====/m",						// Subsubheading
+			"/^===(.+?)===/m",						// Subheading
+			"/^==(.+?)==/m",						// Heading
 	
 			// Formatting
 			"/\'\'\'\'\'(.+?)\'\'\'\'\'/s",					// Bold-italic
@@ -26,10 +26,11 @@ class wiky {
 			"/\'\'(.+?)\'\'/s",						// Italic
 	
 			// Special
-			"/^----+(\s*)$/m",						// Horizontal line
-			"/\[\[(file|img):((ht|f)tp(s?):\/\/(.+?))( (.+))*\]\]/i",	// (File|img):(http|https|ftp) aka image
+			"/^---+(\s*)$/m",						// Horizontal line
+			"/\[\[img:(.+?)( (.+))?\]\]/i",	// (File|img):(http|https|ftp) aka image
 			"/\[((news|(ht|f)tp(s?)|irc):\/\/(.+?))( (.+))\]/i",		// Other urls with text
 			"/\[((news|(ht|f)tp(s?)|irc):\/\/(.+?))\]/i",			// Other urls without text
+			"/\[\/(.+?)\.txt (.+?)\]/i",			// Internal urls
 	
 			// Indentations
 			"/[\n\r]: *.+([\n\r]:+.+)*/",					// Indentation first pass
@@ -52,9 +53,7 @@ class wiky {
 			// List items
 			"/^[#\*]+ *(.+)$/m",						// Wraps all list items to <li/>
 	
-			// Newlines (TODO: make it smarter and so that it groupd paragraphs)
-			"/^(?!<li|dd).+(?=(<a|strong|em|img)).+$/mi",			// Ones with breakable elements (TODO: Fix this crap, the li|dd comparison here is just stupid)
-			"/^[^><\n\r]+$/m",						// Ones with no elements
+			"/\r\n\r\n/m",						// Ones with no elements
 		);
 		$this->replacements=array(
 			// Headings
@@ -69,9 +68,10 @@ class wiky {
 	
 			// Special
 			"<hr/>",
-			"<img src=\"$2\" alt=\"$6\"/>",
+			"<img src=\"$1\" alt=\"$3\"/>",
 			"<a href=\"$1\">$7</a>",
 			"<a href=\"$1\">$1</a>",
+			"<a href=\"/$1.txt\">$2</a>",
 	
 			// Indentations
 			"\n<dl>$0\n</dl>", // Newline is here to make the second pass easier
@@ -95,8 +95,7 @@ class wiky {
 			"<li>$1</li>",
 	
 			// Newlines
-			"$0<br/>",
-			"$0<br/>",
+			"<br/><br/>",
 		);
 		if($analyze) {
 			foreach($this->patterns as $k=>$v) {

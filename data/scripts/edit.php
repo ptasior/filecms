@@ -58,11 +58,12 @@ Syntax:
 <li>'''' Bold-italic '''''</li>
 <li>'' Bold '''</li>
 <li>' Italic ''</li>
+<li>[enter][enter] New Paragraph</li>
 <li>--- Horizontal Line</li>
-<li> Indentation</li>
-<li>: Subindentation</li>
-<li> Unordered list (up to four levels "**** text")</li>
-<li> Ordered list (up to four levels "#### text")</li>
-<li>[file:http://example.com/image.jpg title]] an image ([[file|img:http|https|ftp://example.com/image.jpg optional]])</li>
-<li>http://example.com An Example Link] a link ([http|https|ftp://example.com optional])</li>
+<li>: Indentation</li>
+<li>:: Subindentation</li>
+<li>* Unordered list (up to four levels "**** text")</li>
+<li># Ordered list (up to four levels "#### text")</li>
+<li>[[file:http://example.com/image.jpg title]] an image ([[file|img:http|https|ftp://example.com/image.jpg optional]])</li>
+<li>[http://example.com An Example Link] a link ([http|https|ftp://example.com optional])</li>
 </ul>
