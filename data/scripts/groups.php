@@ -1,4 +1,12 @@
 <?php
+	// function wildcard2regex($str)
+	// {
+	// }
+
+	// function regex2wildcard($str)
+	// {
+	// }
+
 	global $USERS_FILE;
 
 	require_once 'script/auth.php';
@@ -12,6 +20,14 @@
 			case 'del':
 				if(!isset($users['groups'][$_REQUEST['group']]))
 					print_error('Such group doesn\'t exists');
+
+				if($_REQUEST['group'] == 'public')
+					print_error('You cannot remove \'public\' group');
+
+				foreach($users['users'] as $l => $u)
+					if(in_array($_REQUEST['group'], $u['groups']))
+						print_error('Group is not empty (user: '.$l.')');
+
 				unset($users['groups'][$_REQUEST['group']]);
 				break;
 			case 'name':
@@ -24,29 +40,23 @@
 			case 'allow':
 				if(!isset($users['groups'][$_REQUEST['group']]))
 					print_error('Such group doesn\'t exists');
-				$users['groups'][$_REQUEST['group']]['allow'] =
-												split("\n", $_REQUEST['allow']);
+				$allow = array_map('trim', explode("\n", $_REQUEST['allow']));
+				$users['groups'][$_REQUEST['group']]['allow'] = $allow;
 				break;
 			case 'deny':
 				if(!isset($users['groups'][$_REQUEST['group']]))
 					print_error('Such group doesn\'t exists');
-				$users['groups'][$_REQUEST['group']]['deny'] =
-												split("\n", $_REQUEST['deny']);
-				break;
-			case 'users':
-				if(!isset($users['groups'][$_REQUEST['group']]))
-					print_error('Such group doesn\'t exists');
-				$users['groups'][$_REQUEST['group']]['users'] =
-												split("\n", $_REQUEST['users']);
+				$deny = array_map('trim', explode("\n", $_REQUEST['deny']));
+				$users['groups'][$_REQUEST['group']]['deny'] = $deny;
 				break;
 			case 'add':
 				if(isset($users['groups'][$_REQUEST['name']]))
 					print_error('Such group already exists');
+				$allow = array_map('trim', explode("\n", $_REQUEST['allow']));
+				$deny = array_map('trim', explode("\n", $_REQUEST['deny']));
 				$users['groups'][$_REQUEST['name']] = array(
-							'allow'=> split("\n", $_REQUEST['allow']),
-							'deny'=> split("\n", $_REQUEST['deny']),
-							'users'=> split("\n", $_REQUEST['users'])
-							);
+															'allow'=> $allow,
+															'deny'=> $deny);
 				break;
 		}
 
@@ -88,12 +98,6 @@
 </form>
 <form action="/actionPlugin?file=<?=$user_path?>" method="post">
 	<input type="hidden" name="group" value="<?=$name?>"></input>
-	<input type="hidden" name="action" value="users"></input>
-	Users: <textarea name="users"><?=join($g['users'], "\n")?></textarea>
-	<input type="submit" value="Change"></input>
-</form>
-<form action="/actionPlugin?file=<?=$user_path?>" method="post">
-	<input type="hidden" name="group" value="<?=$name?>"></input>
 	<input type="hidden" name="action" value="del"></input>
 	<input type="submit" value="Delete group"></input>
 </form>
@@ -106,6 +110,5 @@
 	Name: <input type="text" name="name"></input><br>
 	Allow: <textarea name="allow"></textarea><br>
 	Deny: <textarea name="deny"></textarea><br>
-	Users: <textarea name="users"></textarea><br>
 	<input type="submit" value="Add"></input>
 </form>

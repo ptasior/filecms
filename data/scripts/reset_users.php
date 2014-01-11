@@ -1,21 +1,28 @@
 <?php
 	global $USERS_FILE;
-	$users = array('users'=> array('ja'=>'qq', 'admin'=>'xxx') ,
+	$users = array(
+				'users'=> array(
+					'ja'=>array(
+							'groups'=>array('users', 'public'),
+							'pwd'=>md5('qq')
+						),
+					'admin'=>array(
+							'groups'=>array('admin'),
+							'pwd'=>md5('xxx')
+						)
+					) ,
 				'groups'=>array(
 					'public'=>array(
 							'allow'=>array('^\/[^\/]*$'),
 							'deny'=>array('\.php$'),
-							'users'=>array()
 						),
 					'users'=>array(
 							'allow'=>array('.*'),
-							'deny'=>array('^\/admin.*', '^\/scripts.*', '\.php$'),
-							'users'=>array('ja')
+							'deny'=>array('^\/admin.*', '^\/scripts.*'),
 						),
 					'admin'=>array(
 							'allow'=>array('.*'),
 							'deny'=>array(),
-							'users'=>array('admin')
 						)
 					));
 

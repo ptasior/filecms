@@ -7,7 +7,6 @@ function load_users()
 		return array('groups'=> array('public'=>array(
 										'allow'=>array('.*'),
 										'deny'=>array(),
-										'users'=>array()
 									)));
 
 	$fp = fopen($USERS_FILE, "rb");
@@ -38,34 +37,32 @@ function auth_action()
 		unset($_SESSION);
 		session_destroy();
 		forward('/');
-		return;
 	}
-
-	$file = load_users();
 
 	if(isset($_SESSION['user'])) print_error('Already logged');
 
 	if(!isset($_REQUEST['login']) || $_REQUEST['login'] == '')
 		print_error('No credentials given');
 
+	$file = load_users();
 	$login = $_REQUEST['login'];
 
 	if(!isset($file['users'][$login]))
 		print_error('No such user');
 
-	// Add pwd hashing
-	if($_REQUEST['password'] != $file['users'][$login])
+	if(md5($_REQUEST['password']) != $file['users'][$login]['pwd'])
 		print_error('Wrong pasword');
 
 	$_SESSION['user']['login'] = $login;
 	$allow = array();
 	$deny = array();
-	foreach($file['groups'] as $g)
-		if(in_array($login, $g['users']))
+	foreach($file['users'][$login]['groups'] as $g)
+		if(isset($file['groups'][$g]))
 		{
-			$allow = array_merge($g['allow'], $allow);
-			$deny = array_merge($g['deny'], $deny);
+			$allow = array_merge($file['groups'][$g]['allow'], $allow);
+			$deny = array_merge($file['groups'][$g]['deny'], $deny);
 		}
+
 	$_SESSION['user']['allow'] = $allow;
 	$_SESSION['user']['deny'] = $deny;
 
