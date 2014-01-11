@@ -42,6 +42,10 @@ a{
 #top{
 	width: 977px;
 }
+#top form {
+	display: inline;
+	margin-left: 2em;
+}
 #menu{
 	width: 150px;
 	float: left;
