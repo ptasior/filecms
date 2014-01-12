@@ -1,5 +1,5 @@
 <?php global $SCRIPTS_PATH; ?>
-<?php if(allow_path($SCRIPTS_PATH.'/search.php')):?>
+<?php if(allow_path('/'.$SCRIPTS_PATH.'/search.php')):?>
 	<form action="/<?=$SCRIPTS_PATH?>/search.php" method="get">
 		<input type="text" name="q"
 			value="<?php if(isset($_REQUEST['q'])) echo $_REQUEST['q'];?>" >

@@ -3,7 +3,7 @@
 	$users = array(
 				'users'=> array(
 					'ja'=>array(
-							'groups'=>array('users', 'public'),
+							'groups'=>array('users'),
 							'pwd'=>md5('qq')
 						),
 					'admin'=>array(
@@ -13,15 +13,15 @@
 					) ,
 				'groups'=>array(
 					'public'=>array(
-							'allow'=>array('^\/[^\/]*$'),
-							'deny'=>array('\.php$'),
+							'allow'=>array(),
+							'deny'=>array('^\/.*\/.*$', '^.*\.php$'),
 						),
 					'users'=>array(
-							'allow'=>array('.*'),
-							'deny'=>array('^\/admin.*', '^\/scripts.*'),
+							'allow'=>array('\/scripts\/search\.php'),
+							'deny'=>array('^\/admin.*$', '^\/scripts.*$', '^.*\.php$'),
 						),
 					'admin'=>array(
-							'allow'=>array('.*'),
+							'allow'=>array('^.*$'),
 							'deny'=>array(),
 						)
 					));

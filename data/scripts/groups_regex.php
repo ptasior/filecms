@@ -1,28 +1,11 @@
 <?php
-	function wildcard2regex($str)
-	{
-		$str = trim($str);
-		$str = preg_quote($str, '/');
-		$str = str_replace('\*', '.*', $str);
-		$str = str_replace('\?', '.', $str);
-		return '^'.$str.'$';
-	}
+	// function wildcard2regex($str)
+	// {
+	// }
 
-	function regex2wildcard($str)
-	{
-		$str = preg_replace('/([^\\\])\.\*/', '\1*', $str);
-		$str = preg_replace('/([^\\\])\./', '\1?', $str);
-		$str = stripslashes($str);
-		$str = preg_replace('/^\^/', '', $str);
-		$str = preg_replace('/\$$/', '', $str);
-		return $str;
-	}
-
-	// $s = wildcard2regex('/ad.m()ll[]in/*/pl?k');
-	// echo $s .'<br>';
-	// $s = regex2wildcard($s);
-	// echo $s .'<br>';
-	// exit(0);
+	// function regex2wildcard($str)
+	// {
+	// }
 
 	global $USERS_FILE;
 
@@ -57,20 +40,20 @@
 			case 'allow':
 				if(!isset($users['groups'][$_REQUEST['group']]))
 					print_error('Such group doesn\'t exists');
-				$allow = array_map('wildcard2regex', explode("\n", $_REQUEST['allow']));
+				$allow = array_map('trim', explode("\n", $_REQUEST['allow']));
 				$users['groups'][$_REQUEST['group']]['allow'] = $allow;
 				break;
 			case 'deny':
 				if(!isset($users['groups'][$_REQUEST['group']]))
 					print_error('Such group doesn\'t exists');
-				$deny = array_map('wildcard2regex', explode("\n", $_REQUEST['deny']));
+				$deny = array_map('trim', explode("\n", $_REQUEST['deny']));
 				$users['groups'][$_REQUEST['group']]['deny'] = $deny;
 				break;
 			case 'add':
 				if(isset($users['groups'][$_REQUEST['name']]))
 					print_error('Such group already exists');
-				$allow = array_map('wildcard2regex', explode("\n", $_REQUEST['allow']));
-				$deny = array_map('wildcard2regex', explode("\n", $_REQUEST['deny']));
+				$allow = array_map('trim', explode("\n", $_REQUEST['allow']));
+				$deny = array_map('trim', explode("\n", $_REQUEST['deny']));
 				$users['groups'][$_REQUEST['name']] = array(
 															'allow'=> $allow,
 															'deny'=> $deny);
@@ -105,15 +88,13 @@
 <form action="/actionPlugin?file=<?=$user_path?>" method="post">
 	<input type="hidden" name="group" value="<?=$name?>"></input>
 	<input type="hidden" name="action" value="allow"></input>
-	Allow: <textarea name="allow"><?=
-		join(array_map('regex2wildcard', $g['allow']), "\n")?></textarea>
+	Allow: <textarea name="allow"><?=join($g['allow'], "\n")?></textarea>
 	<input type="submit" value="Change"></input>
 </form>
 <form action="/actionPlugin?file=<?=$user_path?>" method="post">
 	<input type="hidden" name="group" value="<?=$name?>"></input>
 	<input type="hidden" name="action" value="deny"></input>
-	Deny: <textarea name="deny"><?=
-		join(array_map('regex2wildcard', $g['deny']), "\n")?></textarea>
+	Deny: <textarea name="deny"><?=join($g['deny'], "\n")?></textarea>
 	<input type="submit" value="Change"></input>
 </form>
 <form action="/actionPlugin?file=<?=$user_path?>" method="post">
@@ -132,10 +113,3 @@
 	Deny: <textarea name="deny"></textarea><br>
 	<input type="submit" value="Add"></input>
 </form>
-
-The order of maching is as follows:
-<ul>
-<li>Check if pattern matches anything in allow list, if so allow</li>
-<li>Check if pattern matches an entry in disallow list, then disallow</li>
-<li>Otherwise allow</li>
-</ul>

@@ -61,15 +61,23 @@ function send_file($file)
 // To be called internally
 function check_privs($privs, $name)
 {
+	$matches = false;
+
+	foreach($privs['allow'] as $p)
+		if(preg_match('/'.$p.'/', $name))
+		{
+			$matches = true;
+			break;
+		}
+
+	if($matches)
+		return true;
+
 	foreach($privs['deny'] as $p)
 		if(preg_match('/'.$p.'/', $name))
 			return false;
 
-	foreach($privs['allow'] as $p)
-		if(preg_match('/'.$p.'/', $name))
-			return true;
-
-	return false;
+	return true;
 }
 
 // Returns the file name in data directory. Usage filename(__FILE__)
