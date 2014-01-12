@@ -6,7 +6,9 @@
 </head>
 <body>
 	<div id="main_box">
-	<div id="logo" class="box"><h1>网页</h1></div>
+	<div id="logo" class="box">
+		<?php module('logo')?>
+	</div>
 	<div id="top" class="box">
 		<?php module('user')?>
 	</div>

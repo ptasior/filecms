@@ -30,7 +30,7 @@
 	}
 ?>
 
-<h3>Change password</h3>
+<h1>Change password</h1>
 <?php if(isset($_REQUEST['ok'])):?>
 	<div>Password is changed</div><br>
 <?php endif ?>

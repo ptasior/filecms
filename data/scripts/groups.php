@@ -76,6 +76,7 @@
 	}
 ?>
 
+<h1>Groups</h1>
 <?php foreach($users['groups'] as $name=>$g):?>
 <h3><?=$name?></h3>
 <form action="/actionPlugin?file=<?=$user_path?>" method="post">

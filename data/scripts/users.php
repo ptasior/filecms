@@ -80,6 +80,7 @@
 	}
 ?>
 
+<h1>Users</h1>
 <?php foreach($users['users'] as $login=>$pwd):?>
 <h3><?=$login?></h3>
 <form action="/actionPlugin?file=<?=$user_path?>" method="post">
