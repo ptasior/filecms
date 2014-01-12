@@ -20,6 +20,7 @@ function list_files($path)
 		}
 		closedir($handle);
 	}
+	sort($list);
 	return $list;
 }
 

@@ -1,0 +1,3 @@
+== Scripts ==
+* Tu sa pliki modulow.
+* Nie zmieniaj nic jak nie wiesz co robisz!

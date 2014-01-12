@@ -22,6 +22,8 @@ function list_dir($path)
 		}
 		closedir($handle);
 	}
+
+	sort($list);
 	return $list;
 }
 $t = array('tree'=>array('name'=>'home', 'path'=>'/', 'list'=>list_dir($DATA_PATH)));
