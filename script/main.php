@@ -18,7 +18,8 @@ function module($name, $params=array())
 function print_error($msg)
 {
 	ob_end_clean();
-	echo 'error: '.$msg;
+	template('error', array('msg'=>$msg));
+	// echo 'error: '.$msg;
 	exit(0);
 }
 

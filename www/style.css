@@ -42,9 +42,13 @@ a{
 #top{
 	width: 977px;
 }
-#top form {
+#search{
+	float: left;
+	/* margin-left: 2em; */
+}
+#top form{
+	margin: 0;
 	display: inline;
-	margin-left: 2em;
 }
 #menu{
 	width: 150px;
@@ -73,13 +77,17 @@ textarea, input {
 #top{
 	text-align: right;
 }
-#top form{
-	margin: 0;
-}
 .breadcrumb{
 	font-weight: bold;
 }
 #panel{
 	text-align: right;
+}
+#error{
+	margin: 5em auto;
+	width: 70%;
+	text-align: center;
+	background-color: red;
+	color: white;
 }
 
