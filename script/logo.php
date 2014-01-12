@@ -1,6 +1,8 @@
 <?php
 	global $LOGO_FILE;
 
+	if(!file_exists($LOGO_FILE)) return;
+
 	require_once('wiky.php');
 	$wiky = new wiky;
 
